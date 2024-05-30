@@ -1,0 +1,103 @@
+[gd_scene load_steps=15 format=3 uid="uid://bbgvdb5ghgbn5"]
+
+[ext_resource type="PackedScene" uid="uid://bdiffmx8375rt" path="res://world_environment.tscn" id="1_wetyy"]
+[ext_resource type="Material" uid="uid://c7wix4ge6wf2f" path="res://materials/grid.tres" id="2_0v4p4"]
+[ext_resource type="PackedScene" uid="uid://dat4r7hjgq0v6" path="res://controllers/fpscontroller.tscn" id="3_4yo6k"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7gi51"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v5usr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqbch"]
+albedo_color = Color(0.584314, 0.454902, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l6gik"]
+lightmap_size_hint = Vector2i(14, 21)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p4nqa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uorjs"]
+albedo_color = Color(0, 0.415686, 0.415686, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_5ao5v"]
+left_to_right = 1.0
+size = Vector3(2, 0.5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_67mwu"]
+size = Vector3(2.06378, 0.746277, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nam2g"]
+albedo_color = Color(0.192157, 0.384314, 0.266667, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mvwqh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qhrb6"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_wetyy")]
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("3_4yo6k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64646, -0.0219491, -3.12435)
+TOGGLE_CROUCH = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, -0.5, 0)
+material_override = ExtResource("2_0v4p4")
+mesh = SubResource("BoxMesh_7gi51")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("BoxShape3D_v5usr")
+
+[node name="Box" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51, 0.5, 0.504)
+material_override = SubResource("StandardMaterial3D_gqbch")
+mesh = SubResource("BoxMesh_l6gik")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Box"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Box/StaticBody3D"]
+shape = SubResource("BoxShape3D_p4nqa")
+
+[node name="Ramp" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.9464, 0, 0, 0, 2.00624, 0, 0, 0, 2.85066, 6.83861, 0.465527, 0.504)
+material_override = SubResource("StandardMaterial3D_uorjs")
+mesh = SubResource("PrismMesh_5ao5v")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ramp"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp/StaticBody3D"]
+transform = Transform3D(0.970296, -0.241922, 0, 0.241922, 0.970296, 0, 0, 0, 1, 0.0688882, -0.365054, 0.00385834)
+shape = SubResource("BoxShape3D_67mwu")
+
+[node name="Crouchable" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 5, 3.486, 2.4, -12.358)
+material_override = SubResource("StandardMaterial3D_nam2g")
+mesh = SubResource("BoxMesh_mvwqh")
+skeleton = NodePath("../Ramp")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Crouchable"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crouchable/StaticBody3D"]
+shape = SubResource("BoxShape3D_qhrb6")
+
+[node name="Label3D" type="Label3D" parent="Crouchable"]
+transform = Transform3D(1, 0, 0, 0, 4.54, 0, 0, 0, 1, 0, 1.8717, 0)
+text = "Crouch"
+
+[node name="TooLow" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 5, -10.7406, 1.93132, -12.358)
+material_override = SubResource("StandardMaterial3D_nam2g")
+mesh = SubResource("BoxMesh_mvwqh")
+skeleton = NodePath("../Ramp")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="TooLow"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TooLow/StaticBody3D"]
+shape = SubResource("BoxShape3D_qhrb6")
+
+[node name="Label3D" type="Label3D" parent="TooLow"]
+transform = Transform3D(1, 0, 0, 0, 3.54, 0, 0, 0, 1, 0, 2.00596, 0)
+text = "No Fit"
